@@ -159,7 +159,7 @@ Test suite verifies:
 
 ---
 
-## 🧠 Interview Guide: How the Optimizer & Simulator Work
+## How the Optimizer & Simulator Work
 
 ### 1. Markowitz Mean-Variance Optimization (SLSQP)
 
@@ -205,33 +205,3 @@ This assumes a deterministic, perfectly flat monthly return $r$. In real markets
    - **Percentile Outcomes**: $P_{10}, P_{25}, P_{50}, P_{75}, P_{90}$ extracted via `np.percentile(final_corpus, q)`.
 
 ---
-
-## 🌐 Production Deployment
-
-### Backend on Render
-1. Push this repository to GitHub.
-2. In Render, select **New Web Service** pointing to the repository.
-3. Configure:
-   - **Root Directory**: `backend`
-   - **Runtime**: `Python 3`
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-4. Set Environment Variables:
-   - `MONGODB_URI`: Your MongoDB Atlas connection string (`mongodb+srv://...`)
-   - `DB_NAME`: `sipwise`
-   - `CORS_ORIGINS`: Your frontend URL (e.g., `https://sip-wise.vercel.app`)
-
-### Frontend on Vercel or Netlify
-1. In Vercel / Netlify, import the GitHub repository.
-2. Configure:
-   - **Root Directory**: `frontend`
-   - **Framework Preset**: `Vite`
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
-3. Environment Variables:
-   - `VITE_API_BASE_URL`: Your Render backend URL (e.g., `https://sipwise-api.onrender.com`)
-
----
-
-## 📜 License
-MIT License. Built for educational and portfolio demonstration purposes.
