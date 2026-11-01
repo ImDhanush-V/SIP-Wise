@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: sipwise_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - sipwise_net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sipwise_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017
+      - DB_NAME=sipwise
+      - RISK_FREE_RATE=0.065
+      - MONTE_CARLO_SIMULATIONS=1000
+      - CORS_ORIGINS=http://localhost:5173,http://localhost:3000,http://localhost:80
+    depends_on:
+      - mongo
+    networks:
+      - sipwise_net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sipwise_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - sipwise_net
+
+volumes:
+  mongo_data:
+
+networks:
+  sipwise_net:
+    driver: bridge
